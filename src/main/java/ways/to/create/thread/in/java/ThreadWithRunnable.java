@@ -4,8 +4,7 @@ public class ThreadWithRunnable {
 
     public static void main(String[] args) throws InterruptedException {
 
-        //Anonymous Class
-        Thread t = new Thread(() -> {
+        Thread t = new Thread(() -> {//Anonymous Class
             try {
                 Thread.sleep(5000);
             } catch (InterruptedException e) {
