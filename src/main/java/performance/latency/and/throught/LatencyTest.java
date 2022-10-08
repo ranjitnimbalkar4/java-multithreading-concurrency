@@ -29,7 +29,7 @@ public class LatencyTest {
         File outputFile = new File(DESTINATION_FILE);
         ImageIO.write(resultImage, "jpg", outputFile);
 
-        System.out.println(String.valueOf(duration));
+        System.out.println(duration);
 
         executorService.shutdown();
     }
@@ -38,19 +38,17 @@ public class LatencyTest {
         int width = originalImage.getWidth();
         int height = originalImage.getHeight() / numberOfThreads;
 
-        ArrayList<Thread> threads = new ArrayList<Thread>();
+        ArrayList<Thread> threads = new ArrayList<>();
 
         for(int i = 0; i < numberOfThreads; i++){
             int xForThread = 0;
             int yForThread = height * i;
 
-            Thread t = new Thread(() -> {
-                recolorImage(originalImage, resultImage, xForThread, yForThread, width, height);
-            });
+            Thread t = new Thread(() -> recolorImage(originalImage, resultImage, xForThread, yForThread, width, height));
             threads.add(t);
         }
 
-        threads.forEach(t -> t.start());
+        threads.forEach(Thread::start);
         threads.forEach(t -> {
             try {
                 t.join();
@@ -79,9 +77,7 @@ public class LatencyTest {
         futures.forEach(f -> {
             try {
                 System.out.println(f.get());
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
+            } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
         });
